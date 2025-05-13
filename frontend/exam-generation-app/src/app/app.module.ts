@@ -7,6 +7,8 @@ import { QuestionListComponent } from './question-list/question-list.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { UploadZoneComponent } from './upload-zone/upload-zone.component';
+import { QuestionTypeConfigComponent } from './question-type-config/question-type-config.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,9 @@ import Aura from '@primeng/themes/aura';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    QuestionListComponent,
+    UploadZoneComponent,
+    QuestionTypeConfigComponent,
     QuestionListComponent
   ],
   providers: [

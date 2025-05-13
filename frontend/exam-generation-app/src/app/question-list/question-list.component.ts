@@ -14,7 +14,7 @@ export class QuestionListComponent {
   toggleDarkMode() {
     const element = document.documentElement;
     if (element) {
-        this.darkModeSelector = !this.darkModeSelector; // Test of the dark mode selector
+        this.darkModeSelector = !this.darkModeSelector; // Test of
         element.classList.toggle('my-app-dark');
     } else {
         console.warn('HTML element not found.');
