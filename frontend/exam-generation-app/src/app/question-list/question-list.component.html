@@ -1,40 +1,12 @@
-<button disabled id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
+<button [disabled]="!filesSelected" (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
 
-<div class="question-card">
-    <strong>What is the capital of France?</strong>
-    <ul>
-        <li>
-            <input type="radio" checked> Paris
+ <div *ngFor="let question of questions" class="question-card">
+      <strong>{{ question.question }}</strong>
+      <ul>
+        <li *ngFor="let answer of question.answers">
+          <input type="radio" [checked]="answer.is_correct">{{ answer.text }}
         </li>
-        <li>
-            <input type="radio"> London
-        </li>
-        <li>
-            <input type="radio"> Rome
-        </li>
-        <li>
-            <input type="radio"> Berlin
-        </li>
-    </ul>
-    <button class="btn btn-sm btn-outline-secondary">Editar</button>
-    <button class="btn btn-sm btn-outline-primary">Regenerar con IA</button>
-</div>
-<div class="question-card">
-    <strong>What is 2 + 2?</strong>
-    <ul>
-        <li>
-            <input type="radio"> 3
-        </li>
-        <li>
-            <input type="radio" checked> 4
-        </li>
-        <li>
-            <input type="radio"> 5
-        </li>
-        <li>
-            <input type="radio"> 6
-        </li>
-    </ul>
-    <button class="btn btn-sm btn-outline-secondary">Editar</button>
-    <button class="btn btn-sm btn-outline-primary">Regenerar con IA</button>
+      </ul>
+      <button class="btn btn-sm btn-outline-secondary">Editar</button>
+      <button class="btn btn-sm btn-outline-primary">Regenerar con IA</button>
 </div>

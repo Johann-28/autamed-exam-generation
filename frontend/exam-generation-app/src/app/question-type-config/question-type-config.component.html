@@ -1,63 +1,59 @@
 <section class="question-type-config">
+  <header>
+    <h5 class="mb-3">Configure the exam by question type and difficulty</h5>
+  </header>
+
+  <!-- Question Type Selector -->
+  <div class="mb-4">
+    <label for="questionType" class="form-label">Select question type</label>
+    <select id="questionType" class="form-select" [(ngModel)]="currentConfig.type">
+      <option value="singleChoice">Multiple Choice (one correct)</option>
+      <option value="multipleChoice">Multiple Choice (one or more correct)</option>
+      <option value="trueFalse">True / False</option>
+      <option value="shortAnswer">Short Answer</option>
+    </select>
+  </div>
+
+  <!-- Dynamic Configuration -->
+  <fieldset id="questionTypeConfiguration">
+    <legend class="visually-hidden">Question Type Configuration</legend>
+    <div class="row g-2">
+      <div class="col-md-3">
+        <label for="easyQuestions" class="form-label">Easy</label>
+        <input id="easyQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.easy" (input)="updateTotal()">
+      </div>
+      <div class="col-md-3">
+        <label for="mediumQuestions" class="form-label">Medium</label>
+        <input id="mediumQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.medium" (input)="updateTotal()">
+      </div>
+      <div class="col-md-3">
+        <label for="hardQuestions" class="form-label">Hard</label>
+        <input id="hardQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.hard" (input)="updateTotal()">
+      </div>
+      <div class="col-md-3">
+        <label for="totalQuestions" class="form-label">Total Questions</label>
+        <input id="totalQuestions" disabled type="number" class="form-control" [(ngModel)]="currentConfig.total">
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- Add/Edit Question Type Button -->
+  <div class="mt-3">
+    <button id="addQuestionType" class="btn btn-secondary w-100" (click)="handleQuestionTypeAction()">
+      {{ editingIndex === -1 ? 'Add Question Type' : 'Edit Question Type' }}
+    </button>
+  </div>
+
+  <!-- List of Added Configurations -->
+  <section id="configurationList" class="mt-4">
     <header>
-        <h5 class="mb-3">Configure the exam by question type and difficulty</h5>
+      <h6>Added Configurations:</h6>
     </header>
-
-    <!-- Question Type Selector -->
-    <div class="mb-4">
-        <label for="questionType" class="form-label">Select question type</label>
-        <select id="questionType" class="form-select">
-            <option value="singleChoice" selected>Multiple Choice (one correct)</option>
-            <option value="multipleChoice">Multiple Choice (one or more correct)</option>
-            <option value="trueFalse">True / False</option>
-            <option value="shortAnswer">Short Answer</option>
-        </select>
-    </div>
-
-    <!-- Dynamic Configuration -->
-    <fieldset id="questionTypeConfiguration">
-        <legend class="visually-hidden">Question Type Configuration</legend>
-        <div class="row g-2">   
-            <div class="col-md-3">
-                <label for="easyQuestions" class="form-label">Easy</label>
-                <input id="easyQuestions" type="number" class="form-control" min="0" value="5">
-            </div>
-            <div class="col-md-3">
-                <label for="mediumQuestions" class="form-label">Medium</label>
-                <input id="mediumQuestions" type="number" class="form-control" min="0" value="3">
-            </div>
-            <div class="col-md-3">
-                <label for="hardQuestions" class="form-label">Hard</label>
-                <input id="hardQuestions" type="number" class="form-control" min="0" value="2">
-            </div>
-            <div class="col-md-3">
-                <label for="totalQuestions" class="form-label">Total Questions</label>
-                <input id="totalQuestions" disabled type="number" class="form-control" value="10">
-            </div>
-        </div>
-    </fieldset>
-
-    <!-- Add/Edit Question Type Button -->
-    <div class="mt-3">
-        <button id="addQuestionType" class="btn btn-secondary w-100">
-            Add Question Type
-        </button>
-    </div>
-
-    <!-- List of Added Configurations -->
-    <section id="configurationList" class="mt-4">
-        <header>
-            <h6>Added Configurations:</h6>
-        </header>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <strong>Multiple Choice (one correct)</strong> - Easy: 5, Medium: 3, Hard: 2, Total: 10
-                <button class="btn btn-sm btn-outline-primary ms-3">Edit</button>
-            </li>
-            <li class="list-group-item">
-                <strong>True / False</strong> - Easy: 4, Medium: 2, Hard: 1, Total: 7
-                <button class="btn btn-sm btn-outline-primary ms-3">Edit</button>
-            </li>
-        </ul>
-    </section>
+    <ul class="list-group">
+      <li *ngFor="let config of questionTypes; let i = index" class="list-group-item">
+        <strong>{{ config.type }}</strong> - Easy: {{ config.easy }}, Medium: {{ config.medium }}, Hard: {{ config.hard }}, Total: {{ config.total }}
+        <button class="btn btn-sm btn-outline-primary ms-3" (click)="editQuestionType(i)">Edit</button>
+      </li>
+    </ul>
+  </section>
 </section>

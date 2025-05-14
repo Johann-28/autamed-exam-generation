@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNG } from 'primeng/config';
+import { Question } from './models/question';
+import { QuestionType } from './models/question-type';
 
 
 @Component({
@@ -11,10 +13,13 @@ import { PrimeNG } from 'primeng/config';
 export class AppComponent implements OnInit {
 
   constructor(private primeng: PrimeNG) {}
-
+  title = 'exam-generation-app';
+  protected questions: Question[] = [];
+  protected files: File[] = [];
+  protected questionTypes: QuestionType[] = [];
+  protected filesSelected: boolean = false; 
 
   ngOnInit() {
       this.primeng.ripple.set(true);
   }
-  title = 'exam-generation-app';
 }

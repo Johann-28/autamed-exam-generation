@@ -6,7 +6,7 @@
   <!-- Upload Zone -->
   <div class="drop-zone mb-3">
     <p>Drag and drop files, images, or videos here,<br>or click to select</p>
-    <input required type="file" class="form-control mt-3"  multiple>
+    <input required type="file" class="form-control mt-3" (change)="onFilesSelected($event)" multiple>
   </div>
 
   <!-- URL Inputs -->
@@ -23,6 +23,6 @@
 
   <!-- Load Button -->
   <div class="mb-4 text-center">
-    <button disabled type="button" class="btn btn-primary">Load Content</button>
+    <button [disabled]="files.length == 0" type="button" class="btn btn-primary" (click)="loadContent()">Load Content</button>
   </div>
 </section>

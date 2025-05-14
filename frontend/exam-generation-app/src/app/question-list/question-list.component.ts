@@ -1,23 +1,37 @@
-import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Question } from '../models/question';
+import { QuestionService } from '../shared/question.service';
 
 @Component({
   selector: 'app-question-list',
-  imports: [ButtonModule, RippleModule],
+  standalone: true,
+  imports: [CommonModule],
+  providers: [QuestionService],
   templateUrl: './question-list.component.html',
-  styleUrl: './question-list.component.scss'
+  styleUrl: './question-list.component.scss',
 })
 export class QuestionListComponent {
-  darkModeSelector = false; // Initial state
+  @Input() filesSelected: boolean = false;
+  @Input() files: File[] = [];
+  questions: Question[] = [];
 
-  toggleDarkMode() {
-    const element = document.documentElement;
-    if (element) {
-        this.darkModeSelector = !this.darkModeSelector; // Test of
-        element.classList.toggle('my-app-dark');
-    } else {
-        console.warn('HTML element not found.');
+  constructor(private questionService: QuestionService) {}
+
+  generateQuestions() {
+    if (!this.filesSelected) {
+      console.warn('No files selected.');
+      return;
     }
+
+    const formData = new FormData();
+    this.files.forEach((file) => {
+      formData.append('files', file);
+    });
+
+    this.questionService.getQuestions(formData).subscribe((data) => {
+      console.log('Questions generated:', data);
+      this.questions = data;
+    });
   }
 }

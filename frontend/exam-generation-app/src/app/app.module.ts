@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { UploadZoneComponent } from './upload-zone/upload-zone.component';
 import { QuestionTypeConfigComponent } from './question-type-config/question-type-config.component';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { QuestionTypeConfigComponent } from './question-type-config/question-typ
     QuestionListComponent
   ],
   providers: [
+    provideHttpClient(),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

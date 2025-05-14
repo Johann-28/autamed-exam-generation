@@ -8,15 +8,15 @@
 <body>
   <div class="container mt-5">
     <!-- Upload Documents Zone -->
-    <app-upload-zone>
+    <app-upload-zone (filesSelectedChange)="filesSelected = $event" (filesChange)="files = $event">
     </app-upload-zone>
 
     <!-- Advanced Configuration by Question Type -->
     <div class="card p-4 mb-4">
-      <app-question-type-config ></app-question-type-config>
+      <app-question-type-config (questionTypesChange)="questionTypes = $event"></app-question-type-config>
     </div>
     <!-- List of generated questions -->
-    <app-question-list >
+    <app-question-list [files]="files" [filesSelected]="filesSelected">
     </app-question-list>
   </div>
 </body>
