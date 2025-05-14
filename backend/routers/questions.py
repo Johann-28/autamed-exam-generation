@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Form
 from services.llm_client import LLMClient
 from typing import List
 
@@ -9,6 +9,7 @@ router = APIRouter(
 )
 
 @router.post("/")
-async def get_questions(files: List[UploadFile] = File(...)):
+async def get_questions(files: List[UploadFile] = File(...),
+                        question_types : str = Form(...)):
     llmClient = LLMClient()
-    return llmClient.generate_questions(files)
+    return llmClient.generate_questions(files , question_types)   

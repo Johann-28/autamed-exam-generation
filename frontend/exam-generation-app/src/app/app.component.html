@@ -16,7 +16,7 @@
       <app-question-type-config (questionTypesChange)="questionTypes = $event"></app-question-type-config>
     </div>
     <!-- List of generated questions -->
-    <app-question-list [files]="files" [filesSelected]="filesSelected">
+    <app-question-list [files]="files" [questionTypes]="questionTypes" [filesSelected]="filesSelected">
     </app-question-list>
   </div>
 </body>

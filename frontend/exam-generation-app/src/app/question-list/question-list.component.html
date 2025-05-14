@@ -1,4 +1,4 @@
-<button [disabled]="!filesSelected" (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
+<button [disabled]="questionTypes.length == 0 || !filesSelected" (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
 
  <div *ngFor="let question of questions" class="question-card">
       <strong>{{ question.question }}</strong>

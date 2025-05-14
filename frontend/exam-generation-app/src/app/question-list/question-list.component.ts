@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Question } from '../models/question';
 import { QuestionService } from '../shared/question.service';
+import { QuestionType } from '../models/question-type';
 
 @Component({
   selector: 'app-question-list',
@@ -15,6 +16,7 @@ export class QuestionListComponent {
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
   questions: Question[] = [];
+  @Input() questionTypes: QuestionType[] = [];
 
   constructor(private questionService: QuestionService) {}
 
@@ -28,6 +30,7 @@ export class QuestionListComponent {
     this.files.forEach((file) => {
       formData.append('files', file);
     });
+    formData.append('question_types', JSON.stringify(this.questionTypes));
 
     this.questionService.getQuestions(formData).subscribe((data) => {
       console.log('Questions generated:', data);
