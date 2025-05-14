@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Question } from '../models/question';
 import { QuestionService } from '../shared/question.service';
 import { QuestionType } from '../models/question-type';
+import { FilesService } from '../shared/files.service';
 
 @Component({
   selector: 'app-question-list',
@@ -18,14 +19,14 @@ export class QuestionListComponent {
   questions: Question[] = [];
   @Input() questionTypes: QuestionType[] = [];
 
-  constructor(private questionService: QuestionService) {}
+  constructor(private questionService: QuestionService, private filesService : FilesService) {}
 
   generateQuestions() {
     if (!this.filesSelected) {
       console.warn('No files selected.');
       return;
     }
-
+    this.filesService.triggerClearFiles();
     const formData = new FormData();
     this.files.forEach((file) => {
       formData.append('files', file);
@@ -33,7 +34,6 @@ export class QuestionListComponent {
     formData.append('question_types', JSON.stringify(this.questionTypes));
 
     this.questionService.getQuestions(formData).subscribe((data) => {
-      console.log('Questions generated:', data);
       this.questions = data;
     });
   }

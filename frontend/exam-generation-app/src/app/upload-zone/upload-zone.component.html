@@ -1,28 +1,19 @@
-<section class="upload-zone">
-  <header>
-    <h2 class="mb-4 text-center">Exam Generator - Advanced Configuration</h2>
-  </header>
-
-  <!-- Upload Zone -->
-  <div class="drop-zone mb-3">
-    <p>Drag and drop files, images, or videos here,<br>or click to select</p>
-    <input required type="file" class="form-control mt-3" (change)="onFilesSelected($event)" multiple>
-  </div>
-
-  <!-- URL Inputs -->
-  <form class="row mb-3">
-    <div class="col-md-6">
-      <label for="pageUrl" class="form-label">Page URL</label>
-      <input id="pageUrl" type="url" class="form-control" placeholder="Enter page URL">
-    </div>
-    <div class="col-md-6">
-      <label for="videoUrl" class="form-label">Video URL</label>
-      <input id="videoUrl" type="url" class="form-control" placeholder="Enter video URL">
-    </div>
-  </form>
-
-  <!-- Load Button -->
-  <div class="mb-4 text-center">
-    <button [disabled]="files.length == 0" type="button" class="btn btn-primary" (click)="loadContent()">Load Content</button>
-  </div>
-</section>
+<div class="card">
+    <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" styleClass="md:w-20rem h-1 mb-6 w-full md:ml-auto">
+                <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
+    </p-progressbar>
+    <p-toast />
+    <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" (onClear)="onClearTemplatingUpload($event)" (onSelect)="onSelectedFiles($event)" (onRemove)="onRemoveFile($event)" [multiple]="true" accept="image/* , .pdf , .ppt , .pptx " [maxFileSize]="maxFileSize" mode="advanced">
+        <ng-template #empty>
+                <div class="flex items-center justify-center flex-col">
+                <i class="leading-none pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color mb-6"></i>
+                <p class="mt-6 mb-0">Drag and drop files to here to upload.</p>
+            </div>
+        </ng-template>
+        <ng-template #content>
+            <ul *ngIf="uploadedFiles.length">
+                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+        </ng-template>
+    </p-fileupload>
+</div>
