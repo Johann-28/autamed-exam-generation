@@ -14,4 +14,8 @@ getQuestions(formData: FormData): Observable<Question[]> {
   return this.http.post<Question[]>(this.dataUrl, formData);
 }   
 
+createGoogleForm(): Observable<any> {
+  console.log('Creating Google Form with questions:');
+  return this.http.get<any>(this.dataUrl + '/create-google-form');
+}
 }
