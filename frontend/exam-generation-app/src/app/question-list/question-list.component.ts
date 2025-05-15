@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Question } from '../models/question';
 import { QuestionService } from '../shared/question.service';
-import { QuestionType } from '../models/question-type';
+import { QuestionTypeConfiguration } from '../models/question-type-configuration';
 import { FilesService } from '../shared/files.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class QuestionListComponent {
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
   questions: Question[] = [];
-  @Input() questionTypes: QuestionType[] = [];
+  @Input() questionTypes: QuestionTypeConfiguration[] = [];
 
   constructor(private questionService: QuestionService, private filesService : FilesService) {}
 

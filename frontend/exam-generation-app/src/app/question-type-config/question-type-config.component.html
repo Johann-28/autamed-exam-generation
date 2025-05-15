@@ -1,59 +1,131 @@
-<section class="question-type-config">
+<section class="card question-type-config" style="margin: 1rem 5vw; overflow-y: auto; height: 70vh; padding-top: 1rem;" >
   <header>
     <h5 class="mb-3">Configure the exam by question type and difficulty</h5>
   </header>
 
-  <!-- Question Type Selector -->
-  <div class="mb-4">
-    <label for="questionType" class="form-label">Select question type</label>
-    <select id="questionType" class="form-select" [(ngModel)]="currentConfig.type">
-      <option value="singleChoice">Multiple Choice (one correct)</option>
-      <option value="multipleChoice">Multiple Choice (one or more correct)</option>
-      <option value="trueFalse">True / False</option>
-      <option value="shortAnswer">Short Answer</option>
-    </select>
+
+  <div class="card justify-center">
+    <!-- Dynamic Configuration -->
+    <fieldset id="questionTypeConfiguration">
+      <div class="row flex flex-wrap gap-3">
+        <div>
+          <label for="easyQuestions" class="form-label mb-2 block font-bold">Question Type</label>
+          <p-select [options]="filteredTypeOptions" [(ngModel)]="currentConfig.type" optionLabel="description"
+            optionValue="description" placeholder="Select a Question type" class="w-full md:w-56" />
+        </div>
+        <div>
+          <label for="easyQuestions" class="form-label mb-2 block font-bold">Easy</label>
+          <p-inputnumber inputId="easyQuestions" [disabled]="false" [(ngModel)]="currentConfig.easy"
+            (onInput)="updateCurrentTotal()" mode="decimal" min="0" [showButtons]="true"></p-inputnumber>
+        </div>
+        <div>
+          <label for="mediumQuestions" class="form-label mb-2 block font-bold">Medium</label>
+          <p-inputnumber inputId="mediumQuestions" [disabled]="false" [(ngModel)]="currentConfig.medium"
+            (onInput)="updateCurrentTotal()" mode="decimal" min="0" [showButtons]="true"></p-inputnumber>
+        </div>
+        <div>
+          <label for="hardQuestions" class="form-label mb-2 block font-bold">Hard</label>
+          <p-inputnumber inputId="hardQuestions" [disabled]="false" [(ngModel)]="currentConfig.hard"
+            (onInput)="updateCurrentTotal()" mode="decimal" min="0" [showButtons]="true"></p-inputnumber>
+        </div>
+        <div>
+          <label for="totalQuestions" class="form-label mb-2 block font-bold">Total Questions</label>
+          <p-inputnumber inputId="totalQuestions" [disabled]="true" [(ngModel)]="currentConfig.total"
+            mode="decimal"></p-inputnumber>
+        </div>
+        <div class="mt-3 flex items-end">
+          <p-button [disabled]="currentConfig.total == 0 || currentConfig.type == ''" id="addQuestionType"
+            class="btn btn-secondary w-100" (click)="addQuestionType()">
+            Add Question type
+          </p-button>
+        </div>
+      </div>
+    </fieldset>
   </div>
 
-  <!-- Dynamic Configuration -->
-  <fieldset id="questionTypeConfiguration">
-    <legend class="visually-hidden">Question Type Configuration</legend>
-    <div class="row g-2">
-      <div class="col-md-3">
-        <label for="easyQuestions" class="form-label">Easy</label>
-        <input id="easyQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.easy" (input)="updateTotal()">
-      </div>
-      <div class="col-md-3">
-        <label for="mediumQuestions" class="form-label">Medium</label>
-        <input id="mediumQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.medium" (input)="updateTotal()">
-      </div>
-      <div class="col-md-3">
-        <label for="hardQuestions" class="form-label">Hard</label>
-        <input id="hardQuestions" type="number" class="form-control" min="0" [(ngModel)]="currentConfig.hard" (input)="updateTotal()">
-      </div>
-      <div class="col-md-3">
-        <label for="totalQuestions" class="form-label">Total Questions</label>
-        <input id="totalQuestions" disabled type="number" class="form-control" [(ngModel)]="currentConfig.total">
-      </div>
-    </div>
-  </fieldset>
-
-  <!-- Add/Edit Question Type Button -->
-  <div class="mt-3">
-    <button id="addQuestionType" class="btn btn-secondary w-100" (click)="handleQuestionTypeAction()">
-      {{ editingIndex === -1 ? 'Add Question Type' : 'Edit Question Type' }}
-    </button>
-  </div>
 
   <!-- List of Added Configurations -->
-  <section id="configurationList" class="mt-4">
+  <section id="configurationList" class="mt-4 card">
     <header>
-      <h6>Added Configurations:</h6>
+      <h6 class="mb-3 font-bold">Added Configurations:</h6>
     </header>
-    <ul class="list-group">
-      <li *ngFor="let config of questionTypes; let i = index" class="list-group-item">
-        <strong>{{ config.type }}</strong> - Easy: {{ config.easy }}, Medium: {{ config.medium }}, Hard: {{ config.hard }}, Total: {{ config.total }}
-        <button class="btn btn-sm btn-outline-primary ms-3" (click)="editQuestionType(i)">Edit</button>
-      </li>
-    </ul>
+    <fieldset id="questionTypeConfiguration">
+  <div *ngFor="let config of questionTypes; let i = index" class=" row flex flex-wrap gap-3 items-start">
+  <div class="flex-1">
+    <label for="easyQuestions" class="form-label mb-2 block font-bold">Question Type</label>
+    <p-select
+      [disabled]="!config.isEditing"
+      [options]="questionTypeOptions"
+      [(ngModel)]="config.type"
+      optionLabel="description"
+      optionValue="description"
+      placeholder="Select a Question type"
+      class="w-full"
+    ></p-select>
+  </div>
+  <div class="flex-1">
+    <label class="form-label mb-2 block font-bold">Easy</label>
+    <p-inputnumber
+      [disabled]="!config.isEditing"
+      [(ngModel)]="config.easy"
+      mode="decimal"
+      min="0"
+      [showButtons]="true"
+      (onInput)="updateTotal(i)"
+    ></p-inputnumber>
+  </div>
+  <div class="flex-1">
+    <label class="form-label mb-2 block font-bold">Medium</label>
+    <p-inputnumber
+      [disabled]="!config.isEditing"
+      [(ngModel)]="config.medium"
+      mode="decimal"
+      min="0"
+      [showButtons]="true"
+      (onInput)="updateTotal(i)"
+    ></p-inputnumber>
+  </div>
+  <div class="flex-1">
+    <label class="form-label mb-2 block font-bold">Hard</label>
+    <p-inputnumber
+      [disabled]="!config.isEditing"
+      [(ngModel)]="config.hard"
+      mode="decimal"
+      min="0"
+      [showButtons]="true"
+      (onInput)="updateTotal(i)"
+    ></p-inputnumber>
+  </div>
+  <div class="flex-1">
+    <label class="form-label mb-2 block font-bold">Total Questions</label>
+    <p-inputnumber
+      [disabled]="true"
+      [(ngModel)]="config.total"
+      mode="decimal"
+      min="0"
+      [showButtons]="true"
+      (onInput)="updateTotal(i)"
+    ></p-inputnumber>
+  </div>
+  <div>
+    <label class="form-label mb-2 block font-bold">&nbsp;</label>
+    <div class="flex gap-2">
+      <p-button
+        [label]="config.isEditing ? 'Save' : 'Edit'"
+        [disabled]="config.isEditing && (config.total === 0 || !config.type)"
+        (onClick)="editQuestionType(i)"
+      ></p-button>
+      <p-button
+        label="Remove"
+        severity="danger"
+        (onClick)="removeQuestionType(i)"
+      ></p-button>
+    </div>
+  </div>
+</div>
+    </fieldset>
   </section>
 </section>
+
+<!-- Toast for Notifications -->
+<p-toast></p-toast>

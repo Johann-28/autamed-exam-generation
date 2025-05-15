@@ -10,6 +10,9 @@ import Aura from '@primeng/themes/aura';
 import { UploadZoneComponent } from './upload-zone/upload-zone.component';
 import { QuestionTypeConfigComponent } from './question-type-config/question-type-config.component';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { StepperModule } from 'primeng/stepper';
+import { ButtonModule } from 'primeng/button';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +24,9 @@ import { HttpClientModule, provideHttpClient } from '@angular/common/http';
     QuestionListComponent,
     UploadZoneComponent,
     QuestionTypeConfigComponent,
-    QuestionListComponent
+    QuestionListComponent,
+    StepperModule,
+    ButtonModule
   ],
   providers: [
     provideHttpClient(),

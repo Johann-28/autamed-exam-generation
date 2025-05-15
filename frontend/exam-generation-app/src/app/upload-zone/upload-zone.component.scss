@@ -1,0 +1,13 @@
+p-fileupload{
+    --p-fileupload-content-padding : 1rem 10vw;
+}
+
+::ng-deep .p-fileupload-content{
+    max-height: 50vh;
+    min-height: 30vh;
+    overflow-y: auto;
+}
+p-fileupload-content{
+    --height: 100px;
+    --overflow-y: auto;
+}

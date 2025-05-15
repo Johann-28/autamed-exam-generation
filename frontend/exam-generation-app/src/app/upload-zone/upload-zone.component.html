@@ -1,9 +1,8 @@
-<div class="card">
     <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" styleClass="md:w-20rem h-1 mb-6 w-full md:ml-auto">
                 <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
     </p-progressbar>
     <p-toast />
-    <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" (onClear)="onClearTemplatingUpload($event)" (onSelect)="onSelectedFiles($event)" (onRemove)="onRemoveFile($event)" [multiple]="true" accept="image/* , .pdf , .ppt , .pptx " [maxFileSize]="maxFileSize" mode="advanced">
+    <p-fileupload class="w-full overflow-y-auto" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" (onClear)="onClearTemplatingUpload($event)" (onSelect)="onSelectedFiles($event)" (onRemove)="onRemoveFile($event)" [multiple]="true" accept="image/* , .pdf , .ppt , .pptx " [maxFileSize]="maxFileSize" mode="advanced">
         <ng-template #empty>
                 <div class="flex items-center justify-center flex-col">
                 <i class="leading-none pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color mb-6"></i>
@@ -16,4 +15,3 @@
             </ul>
         </ng-template>
     </p-fileupload>
-</div>
