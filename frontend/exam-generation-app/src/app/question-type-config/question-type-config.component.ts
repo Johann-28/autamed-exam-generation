@@ -1,93 +1,143 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { QuestionType } from '../models/question-type';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { QuestionTypeConfiguration } from '../models/question-type-configuration';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { QuestionType } from '../models/question-type';
+import { Select, SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { Question } from '../models/question';
 
 @Component({
   selector: 'app-question-type-config',
   templateUrl: './question-type-config.component.html',
   styleUrls: ['./question-type-config.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    InputNumberModule,
+    SelectModule,
+    ButtonModule,
+    ToastModule,
+  ],
+  providers: [MessageService],
 })
-export class QuestionTypeConfigComponent {
-  questionTypes: QuestionType[] = [];
+export class QuestionTypeConfigComponent implements OnInit {
+  questionTypes: QuestionTypeConfiguration[] = [];
   editingIndex: number = -1;
-  @Output() questionTypesChange: EventEmitter<QuestionType[]> =
-    new EventEmitter<QuestionType[]>();
+  @Output() questionTypesChange: EventEmitter<QuestionTypeConfiguration[]> =
+    new EventEmitter<QuestionTypeConfiguration[]>();
 
-  currentConfig: QuestionType = {
-    type: 'singleChoice',
+  currentConfig: QuestionTypeConfiguration = {
+    type: '',
     easy: 0,
     medium: 0,
     hard: 0,
     total: 0,
   };
 
-  // Central method that decides whether to add or edit
-  handleQuestionTypeAction() {
-    if (this.isEditing()) {
-      this.updateQuestionType();
-    } else {
-      this.addQuestionType();
-    }
+  questionTypeOptions: QuestionType[] = [
+    { type: 'singleChoice', description: 'Multiple Choice (one correct)' },
+    { type: 'multipleChoice',
+      description: 'Multiple Choice (one or more correct)',
+    },
+    { type: 'trueFalse', description: 'True/False' },
+    { type: 'shortAnswer', description: 'Short Answer' },
+  ];
+
+  filteredTypeOptions: QuestionType[] = [];
+
+  constructor(private messageService: MessageService) {}
+
+  ngOnInit(): void {
+    this.filteredTypeOptions = this.questionTypeOptions;
   }
 
-  private addQuestionType() {
+  addQuestionType() {
     if (this.isTypeDuplicate(this.currentConfig.type)) {
-      console.error(
-        `The question type "${this.currentConfig.type}" already exists.`
-      );
-      return; // Exit without adding the duplicate type
+      this.messageService.add({
+        severity: 'warn',
+        summary: `The question type "${this.currentConfig.type}" already exists.`,
+        detail: '',
+      });
+      return;
     }
+
+    if (this.currentConfig.type == '' || this.currentConfig.total == 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Please select a question type.',
+        detail: '',
+      });
+      return;
+    }
+
     this.questionTypes.push({ ...this.currentConfig });
     this.emitQuestionTypesChange();
     this.resetCurrentConfig();
-  }
-
-  // Method to update an existing configuration
-  private updateQuestionType() {
-    if (this.isEditing()) {
-      this.questionTypes[this.editingIndex] = { ...this.currentConfig };
-      this.editingIndex = -1; // Exit edit mode
-      this.emitQuestionTypesChange();
-      this.resetCurrentConfig();
-    }
+    this.updateFilteredOptions();
   }
 
   // Method to load an existing configuration into the form for editing
   editQuestionType(index: number) {
-    this.currentConfig = { ...this.questionTypes[index] }; // Load the selected configuration
-    this.editingIndex = index; // Save the index of the configuration being edited
+    const config = this.questionTypes[index];
+    if (config.isEditing) {
+      if (config.total == 0 || config.type == '') {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Please select a question type.',
+          detail: '',
+        });
+        return;
+      }
+      config.isEditing = false;
+    } else {
+      config.isEditing = true;
+    }
   }
 
   // Method to automatically calculate the total number of questions
-  updateTotal() {
+  updateCurrentTotal() {
     this.currentConfig.total =
       this.currentConfig.easy +
       this.currentConfig.medium +
       this.currentConfig.hard;
   }
 
+  removeQuestionType(index: number): void {
+    this.questionTypes.splice(index, 1); 
+    this.updateFilteredOptions();
+  }
+
+  updateTotal(index: number) {
+    const config = this.questionTypes[index];
+    config.total = config.easy + config.medium + config.hard;
+  }
+
   // Method to reset the temporary configuration
   private resetCurrentConfig() {
     this.currentConfig = {
-      type: 'singleChoice',
+      type: '',
       easy: 0,
       medium: 0,
       hard: 0,
       total: 0,
     };
   }
+  
+  updateFilteredOptions(){
+    const selectedTypes = this.questionTypes.map((config) => config.type);
+    this.filteredTypeOptions = this.questionTypeOptions.filter(
+      (option) => !selectedTypes.includes(option.description)
+    );
+  }
 
   // Method to emit the change in the list of configurations
   private emitQuestionTypesChange() {
     this.questionTypesChange.emit(this.questionTypes);
-  }
-
-  // Method to check if it is in edit mode
-  private isEditing(): boolean {
-    return this.editingIndex !== -1;
   }
 
   // Method to check if a type already exists in the list

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNG } from 'primeng/config';
 import { Question } from './models/question';
-import { QuestionType } from './models/question-type';
+import { QuestionTypeConfiguration } from './models/question-type-configuration';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   title = 'exam-generation-app';
   protected questions: Question[] = [];
   protected files: File[] = [];
-  protected questionTypes: QuestionType[] = [];
+  protected questionTypes: QuestionTypeConfiguration[] = [];
   protected filesSelected: boolean = false; 
 
   ngOnInit() {
