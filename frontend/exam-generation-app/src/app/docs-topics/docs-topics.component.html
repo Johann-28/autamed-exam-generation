@@ -1,0 +1,31 @@
+<div class="flex flex-row" style="width:  90vw; "> 
+  <div
+    class="card question-type-config flex items-center flex-wrap content-center justify-center flex-col transition-all duration-500 gap-3"
+    [ngClass]="{ 'basis-full': !sectionVisible, 'basis-[20%]': sectionVisible }"
+    style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
+  >
+    <p-button *ngFor="let item of keyTopics" (onClick)="toggleTopicSelection(item.title)"
+      [raised]="isTopicSelected(item.title)" [label]="item.title" [badgeSeverity]="getValidatedBadgeSeverity()"
+      [variant]="isTopicSelected(item.title) ? 'outlined' : 'text'"
+      [disabled]="sectionVisible"
+      ></p-button>
+
+    <p-button label="Generate Exam" icon="pi pi-arrow-right" iconPos="right" (click)="generateQuestions()" [disabled]="sectionVisible">
+    </p-button>
+
+    <p-dialog [draggable]="false" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '20vw' }"
+      closeOnEscape="false" closable="false">
+      <div class="flex justify-center">
+        <p-progress-spinner ariaLabel="loading" />
+      </div>
+    </p-dialog>
+  </div>
+
+  <div
+    class="card question-type-config flex items-center flex-wrap content-center justify-center flex-col transition-all duration-500"
+    [ngClass]="{ 'hidden': !sectionVisible, 'basis-[80%]': sectionVisible }"
+    style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
+  >
+    <app-question-list [files]="files" [filesSelected]="filesSelected" ></app-question-list>
+  </div>
+</div>

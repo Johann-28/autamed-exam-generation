@@ -1,12 +1,15 @@
-<button [disabled]="questionTypes.length == 0 || !filesSelected" (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
-
- <div *ngFor="let question of questions" class="question-card">
-      <strong>{{ question.question }}</strong>
-      <ul>
-        <li *ngFor="let answer of question.answers">
-          <input type="radio" [checked]="answer.is_correct">{{ answer.text }}
-        </li>
-      </ul>
-      <button class="btn btn-sm btn-outline-secondary">Editar</button>
-      <button class="btn btn-sm btn-outline-primary">Regenerar con IA</button>
-</div>
+<p-scrollpanel>
+    <p-card [header]="question.question" [style]="{ 'margin': '1rem 2rem ', }" *ngFor="let question of questions">
+    <ul>
+      <li *ngFor="let answer of question.answers">
+        <p-radiobutton
+        name="question-{{ question.question }}"
+        [value]="true" 
+        [(ngModel)]="answer.is_correct"
+        inputId="answer-{{ answer.text }}"
+      ></p-radiobutton>
+      <label for="answer-{{ answer.text }}" class="ml-2">{{ answer.text }}</label>
+      </li>
+    </ul>
+  </p-card>
+</p-scrollpanel>

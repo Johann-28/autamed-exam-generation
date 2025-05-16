@@ -1,25 +1,37 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Question } from '../models/question';
 import { QuestionService } from '../shared/question.service';
 import { QuestionTypeConfiguration } from '../models/question-type-configuration';
 import { FilesService } from '../shared/files.service';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { CardModule } from 'primeng/card';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule } from '@angular/forms';
+import { SharedService } from '../shared/shared.service';
+
 
 @Component({
   selector: 'app-question-list',
   standalone: true,
-  imports: [CommonModule],
-  providers: [QuestionService],
+  imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule],
+  providers: [QuestionService, FilesService],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
 })
-export class QuestionListComponent {
+export class QuestionListComponent implements OnInit{
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
-  questions: Question[] = [];
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
+  questions: Question[] = [];
 
-  constructor(private questionService: QuestionService, private filesService : FilesService) {}
+  constructor(private questionService: QuestionService, private filesService : FilesService, private sharedService: SharedService) {}
+
+  ngOnInit(): void {
+    this.sharedService.generateQuestions$.subscribe(() => {
+      this.generateQuestions();
+    });
+  }
 
   generateQuestions() {
     if (!this.filesSelected) {
@@ -34,6 +46,7 @@ export class QuestionListComponent {
     formData.append('question_types', JSON.stringify(this.questionTypes));
 
     this.questionService.getQuestions(formData).subscribe((data) => {
+      this.sharedService.emitQuestions(data);
       this.questions = data;
     });
   }

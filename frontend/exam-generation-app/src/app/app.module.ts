@@ -12,6 +12,7 @@ import { QuestionTypeConfigComponent } from './question-type-config/question-typ
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
+import { DocsTopicsComponent } from './docs-topics/docs-topics.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ButtonModule } from 'primeng/button';
     QuestionTypeConfigComponent,
     QuestionListComponent,
     StepperModule,
-    ButtonModule
+    ButtonModule,
+    DocsTopicsComponent
   ],
   providers: [
     provideHttpClient(),

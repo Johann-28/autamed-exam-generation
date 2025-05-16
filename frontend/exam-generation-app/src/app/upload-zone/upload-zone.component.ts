@@ -28,8 +28,7 @@ export class UploadZoneComponent {
   totalSizePercent: number = 0;
 
   // Output variables to emit the state of filesSelected and the list of files
-  @Output() filesSelectedChange: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Output() filesSelectedChange = new EventEmitter<boolean>();
   @Output() filesChange: EventEmitter<File[]> = new EventEmitter<File[]>();
 
   constructor(
@@ -61,10 +60,9 @@ export class UploadZoneComponent {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-    const hasFiles = this.files.length > 0;
+    const hasFiles = this.uploadedFiles.length > 0;
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
-    
-    this.filesChange.emit(this.files);
+    this.filesChange.emit(this.uploadedFiles);
     this.filesSelectedChange.emit(hasFiles);
   }
 

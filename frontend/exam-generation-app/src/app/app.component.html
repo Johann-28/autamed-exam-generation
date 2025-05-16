@@ -1,9 +1,10 @@
 <div class="card flex justify-center h-screen ">
-    <p-stepper [value]="1" class="basis-[100rem]" [linear]="true">
+    <p-stepper #stepper [value]="1" class="basis-[100rem]" [linear]="true">
         <p-step-list>
             <p-step [value]="1">Upload files</p-step>
             <p-step [value]="2">Question types</p-step>
-            <p-step [value]="3">Header II</p-step>
+            <p-step [value]="3">Select topics</p-step>
+            <p-step [value]="4">Export exam</p-step>
         </p-step-list>
         <p-step-panels>
             <p-step-panel [value]="1">
@@ -41,20 +42,32 @@
 
             <p-step-panel [value]="3">
                 <ng-template #content let-activateCallback="activateCallback">
-                    <div class="flex flex-col h-48">
-                        <div
-                            class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
-                            <app-question-list [files]="files" [questionTypes]="questionTypes"
-                                [filesSelected]="filesSelected">
-                            </app-question-list>
+                    <div class="flex flex-col h-48" style="height: 70vh;">
+                        <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 flex-auto flex justify-center items-center font-medium">
+                            <app-docs-topics [files]="files" [filesSelected]="filesSelected"></app-docs-topics>
                         </div>
                     </div>
-                    <div class="flex pt-6 justify-start">
-                        <p-button label="Back" icon="pi pi-arrow-left" iconPos="right"
-                            (onClick)="activateCallback(2)" />
+                    <div class="flex mt-10 pt-6 justify-between">
+                        <p-button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                            (onClick)="activateStep(2)" />
+                    </div>
+                </ng-template>
+            </p-step-panel>
+            <p-step-panel [value]="4" >
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="flex flex-col h-48" style="height: 70vh;">
+                        <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 flex-auto flex justify-center items-center font-medium">
+                            <app-question-list [files]="files" [questionTypes]="questionTypes"
+                                [filesSelected]="filesSelected"></app-question-list>
+                        </div>
+                    </div>
+                    <div class="flex mt-10 pt-6 justify-between">
+                        <p-button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                            (onClick)="activateCallback(3)" />
                     </div>
                 </ng-template>
             </p-step-panel>
         </p-step-panels>
     </p-stepper>
 </div>
+
