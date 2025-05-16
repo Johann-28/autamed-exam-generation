@@ -88,7 +88,7 @@ class LLMClient:
         """Get the topics of the documents."""
         text = TextUtils.combine_text_from_files(files)
         prompt = f"""
-            Identify and list exactly 6 main topics covered in the following text. 
+            Identify and list exactly 5 main topics covered in the following text. 
             Return only the topics as a JSON array of strings.
             Text:
             {text}
