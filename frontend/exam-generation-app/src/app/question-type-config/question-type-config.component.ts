@@ -45,7 +45,6 @@ export class QuestionTypeConfigComponent implements OnInit {
       description: 'Multiple Choice (one or more correct)',
     },
     { type: 'trueFalse', description: 'True/False' },
-    { type: 'shortAnswer', description: 'Short Answer' },
   ];
 
   filteredTypeOptions: QuestionType[] = [];

@@ -4,8 +4,10 @@
     [ngClass]="{ 'basis-full': !sectionVisible, 'basis-[20%]': sectionVisible }"
     style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
   >
-    <p-button *ngFor="let item of keyTopics" (onClick)="toggleTopicSelection(item.title)"
-      [raised]="isTopicSelected(item.title)" [label]="item.title" [badgeSeverity]="getValidatedBadgeSeverity()"
+    <p-button *ngFor="let item of keyTopics" 
+      (onClick)="toggleTopicSelection(item.title)"
+      [raised]="isTopicSelected(item.title)" [label]="item.title" 
+      [severity]="getValidatedBadgeSeverity()"
       [variant]="isTopicSelected(item.title) ? 'outlined' : 'text'"
       [disabled]="sectionVisible"
       ></p-button>
@@ -26,6 +28,6 @@
     [ngClass]="{ 'hidden': !sectionVisible, 'basis-[80%]': sectionVisible }"
     style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
   >
-    <app-question-list [files]="files" [filesSelected]="filesSelected" ></app-question-list>
+    <app-question-list [files]="files" [filesSelected]="filesSelected" [selectedTopics]="selectedTopics" [questionTypes]="questionTypes" ></app-question-list>
   </div>
 </div>

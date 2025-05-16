@@ -44,7 +44,7 @@
                 <ng-template #content let-activateCallback="activateCallback">
                     <div class="flex flex-col h-48" style="height: 70vh;">
                         <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 flex-auto flex justify-center items-center font-medium">
-                            <app-docs-topics [files]="files" [filesSelected]="filesSelected"></app-docs-topics>
+                            <app-docs-topics [files]="files" [filesSelected]="filesSelected" [questionTypes]="questionTypes"></app-docs-topics>
                         </div>
                     </div>
                     <div class="flex mt-10 pt-6 justify-between">
@@ -57,8 +57,7 @@
                 <ng-template #content let-activateCallback="activateCallback">
                     <div class="flex flex-col h-48" style="height: 70vh;">
                         <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 flex-auto flex justify-center items-center font-medium">
-                            <app-question-list [files]="files" [questionTypes]="questionTypes"
-                                [filesSelected]="filesSelected"></app-question-list>
+     
                         </div>
                     </div>
                     <div class="flex mt-10 pt-6 justify-between">

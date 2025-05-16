@@ -9,6 +9,7 @@ import { CardModule } from 'primeng/card';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../shared/shared.service';
+import { KeyTopics } from '../models/key-topics';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class QuestionListComponent implements OnInit{
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
+  @Input() selectedTopics: string[] = []; 
   questions: Question[] = [];
 
   constructor(private questionService: QuestionService, private filesService : FilesService, private sharedService: SharedService) {}
@@ -44,6 +46,7 @@ export class QuestionListComponent implements OnInit{
       formData.append('files', file);
     });
     formData.append('question_types', JSON.stringify(this.questionTypes));
+    formData.append('key_topics', JSON.stringify(this.selectedTopics));
 
     this.questionService.getQuestions(formData).subscribe((data) => {
       this.sharedService.emitQuestions(data);

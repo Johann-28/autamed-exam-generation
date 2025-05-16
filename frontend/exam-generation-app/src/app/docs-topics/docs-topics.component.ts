@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { KeyTopics } from '../models/key-topics';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { QuestionListComponent } from '../question-list/question-list.component';
 import { SharedService } from '../shared/shared.service';
+import { QuestionService } from '../shared/question.service';
+import { QuestionTypeConfiguration } from '../models/question-type-configuration';
 
 
 @Component({
@@ -14,20 +16,27 @@ import { SharedService } from '../shared/shared.service';
   imports: [ButtonModule, CommonModule, DialogModule, ProgressSpinnerModule, QuestionListComponent],
   templateUrl: './docs-topics.component.html',
   styleUrl: './docs-topics.component.scss',
-  providers: [SharedService],
+  providers: [SharedService, QuestionService]
 })
 export class DocsTopicsComponent implements OnInit{
 
-  dialogVisible: boolean = false;
-  sectionVisible: boolean = false;
-
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
+  @Input() questionTypes: QuestionTypeConfiguration[] = [];
 
-
-  constructor(private sharedService : SharedService) {}
+  dialogVisible: boolean = false;
+  sectionVisible: boolean = false;
+  keyTopics: KeyTopics[] = [];
+  selectedTopics: string[] = []; 
+  badgeSeverity: string | undefined;
+  allowedSeverities = ["success", "info", "warn", "danger", "help", "primary", "secondary", "contrast"] as const;
+  constructor(private sharedService : SharedService, 
+              private questionService : QuestionService
+            ) {}
 
   ngOnInit(): void {
+    this.dialogVisible = true;
+    this.getDocsTopics();
     this.sharedService.questions$.subscribe({
       next: () => {
         this.dialogVisible = false;
@@ -36,61 +45,29 @@ export class DocsTopicsComponent implements OnInit{
     });
   }
 
-
-
-
+  getDocsTopics(): void {
+    const formData = new FormData();
+    this.files.forEach((file) => {
+      formData.append('files', file);
+    });
+    this.questionService.getDocsTopics(formData).subscribe((data) => {
+      this.keyTopics = data;
+      this.dialogVisible = false;
+    });
+  }
 
   generateQuestions(): void {
     this.dialogVisible = true;
     this.sharedService.triggerGenerateQuestions();   
   }
 
-  keyTopics: KeyTopics[] = [
-    {
-      title: 'Data Types and Variables',
-      description: 'Covers Python data types such as integers, floats, strings, and how to declare variables.',
-      badgeSeverity: ''
-    },
-    {
-      title: 'Control Flow',
-      description: 'Explains if-else statements, loops, and how to control the flow of a Python program.',
-      badgeSeverity: ''
-    },
-    {
-      title: 'Functions and Modules',
-      description: 'Details how to define functions, use built-in modules, and create custom modules.',
-      badgeSeverity: ''
-    },
-    {
-      title: 'Object-Oriented Programming',
-      description: 'Introduces classes, objects, inheritance, and other OOP concepts in Python.',
-      badgeSeverity: ''
-    },
-    {
-      title: 'File Handling',
-      description: 'Describes how to read from and write to files using Python.',
-      badgeSeverity: ''
-    },
-    {
-      title: 'Error and Exception Handling',
-      description: 'Explains how to handle errors and exceptions using try-except blocks.',
-      badgeSeverity: ''
-    }
-  ];
-
-    selectedTopics: string[] = []; // Lista de elementos seleccionados
-
-    badgeSeverity: string | undefined;
-    allowedSeverities = ["success", "info", "warn", "danger", "help", "primary", "secondary", "contrast"] as const;
 
     getValidatedBadgeSeverity(): "success" | "info" | "warn" | "danger" | "help" | "primary" | "secondary" | "contrast" | null | undefined {
-      return this.allowedSeverities.includes(this.badgeSeverity as any) ? this.badgeSeverity as any : undefined;
+      const randomIndex = Math.floor(Math.random() * this.allowedSeverities.length);
+      return this.allowedSeverities[randomIndex];
     }
 
-    
-    
-
-
+  
     toggleTopicSelection(topic: string): void {
     const index = this.selectedTopics.indexOf(topic);
 
