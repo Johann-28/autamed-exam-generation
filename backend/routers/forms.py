@@ -2,6 +2,7 @@ import os
 import json
 import pickle
 import requests
+from utils.parsing_utils import ParsingUtils
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -94,71 +95,12 @@ class GoogleFormsQuizManager:
             print(f"Error: {str(e)}")
             raise
 
-    @staticmethod
-    def convert_questions_format(original_questions : list[Question]):
-        """Convert question format from Python to the format required by Apps Script."""
-        apps_script_questions = []
-
-        for q in original_questions:
-            new_q = {
-                            'title': q['question'],
-                            'points': q['points'],
-                            'feedback': {
-                                'correct': 'Correct!',
-                                'incorrect': 'Incorrect answer.'
-                            }
-                        }
-
-            if q['type'] == 'RADIO':
-                new_q['type'] = 'MULTIPLE_CHOICE'
-                new_q['options'] = q['options']
-                new_q['correctAnswer'] = q['correct_answers'][0]
-            elif q['type'] == 'CHECKBOX':
-                new_q['type'] = 'CHECKBOX'
-                new_q['options'] = q['options']
-                new_q['correctAnswers'] = q['correct_answers']
-            elif q['type'] == 'TEXT':
-                new_q['type'] = 'TEXT'
-                new_q['correctAnswer'] = q['correct_answers'][0]
-                new_q['feedback']['general'] = 'Thanks for your answer.'
-
-            apps_script_questions.append(new_q)
-
-        return apps_script_questions
-
-    def run_sample(self):
+    def run_sample(self, questions : list[Question]):
         """Sample usage of the class."""
         title = "Pruebaaaaa"
         description = "This is a sample quiz with 3 questions and scoring."
 
-        original_questions = [
-            {
-                'question': 'What is the capital of France?',
-                'type': 'RADIO',
-                'options': ['Paris', 'London', 'Madrid', 'Rome'],
-                'correct_answers': ['Paris'],
-                'points': 1
-            },
-            {
-                'question': 'Which programming language are we using?',
-                'type': 'RADIO',
-                'options': ['Java', 'Python', 'C++', 'JavaScript'],
-                'correct_answers': ['Python'],
-                'points': 3
-            },
-            {
-                'question': 'What is the result of 5 * 8?',
-                'type': 'RADIO',
-                'options': ['13', '40', '35', '45'],
-                'correct_answers': ['40'],
-                'points': 1
-            }
-        ]
-
-        questions_for_apps_script = self.convert_questions_format(original_questions)
-
-        # Convert the questions to the format json
-        questions_for_apps_script_json = json.dumps(questions_for_apps_script)
+        questions_for_apps_script = ParsingUtils.convert_questions_for_google_forms(questions)
 
         try:
             result = self.create_complete_quiz(title, description, questions_for_apps_script)
