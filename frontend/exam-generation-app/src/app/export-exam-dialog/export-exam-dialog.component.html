@@ -1,0 +1,12 @@
+<div class="flex">
+
+  <p-floatlabel class="flex items-center gap-2">
+      <input pInputText id="over_label" [ngModel]="formsUrl" autocomplete="off" style="flex:1;" [disabled]="true" />
+      <label for="over_label">Edit form url</label>
+  </p-floatlabel>
+  
+  <p-button class="mb-8" icon="pi pi-clipboard" [rounded]="true" [text]="true" severity="secondary" (onClick)="copyToClipboard(formsUrl)"/>
+</div>
+@if (visible()) {
+  <p-message [life]="3000" severity="success">Link copied</p-message>
+}

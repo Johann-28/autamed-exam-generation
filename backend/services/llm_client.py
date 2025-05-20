@@ -44,6 +44,9 @@ class LLMClient:
             Generate in JSON format.
             The questions should be of the following types:
             {question_types_instructions}
+            If Multiple Choise, provide 1 as a type.
+            If CheckBox, provide 2 as a type.
+            If Text, provide 3 as a type.
             Focus on the following key topics:
             {key_topics_instructions}
             Consider the following docs:

@@ -107,6 +107,7 @@ class GoogleFormsQuizManager:
             print("\nQuiz created and configured successfully!")
             print(f"Edit URL: {result['formUrl']}")
             print(f"Published URL: {result['publishedUrl']}")
+            return result['formUrl']
         except Exception as e:
             print(f"Execution error: {str(e)}")
             import traceback

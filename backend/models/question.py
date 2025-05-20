@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class Question(BaseModel):
     question: str
-    type: str
+    type: int
     points: int
     class Answer(BaseModel):
         text: str

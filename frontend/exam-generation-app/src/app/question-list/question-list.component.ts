@@ -9,13 +9,17 @@ import { CardModule } from 'primeng/card';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../shared/shared.service';
-import { KeyTopics } from '../models/key-topics';
+import { DialogModule } from 'primeng/dialog';
+import { ExportExamDialogComponent } from '../export-exam-dialog/export-exam-dialog.component';
+import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 
 @Component({
   selector: 'app-question-list',
   standalone: true,
-  imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule],
+  imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule, DialogModule, ExportExamDialogComponent, ButtonModule, ProgressSpinnerModule],
   providers: [QuestionService, FilesService],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
@@ -25,6 +29,9 @@ export class QuestionListComponent implements OnInit{
   @Input() files: File[] = [];
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
   @Input() selectedTopics: string[] = []; 
+  formsUrl : string = '';
+  dialogVisible: boolean = false;
+  dialogFormVisible: boolean = false;
   questions: Question[] = [];
 
   constructor(private questionService: QuestionService, private filesService : FilesService, private sharedService: SharedService) {}
@@ -48,9 +55,17 @@ export class QuestionListComponent implements OnInit{
     formData.append('question_types', JSON.stringify(this.questionTypes));
     formData.append('key_topics', JSON.stringify(this.selectedTopics));
 
-    this.questionService.getQuestions(formData).subscribe((data) => {
+    this.questionService.getMockupQuestions().subscribe((data) => {
       this.sharedService.emitQuestions(data);
       this.questions = data;
+    });
+  }
+
+  exportExam(): void {
+    this.dialogVisible = true;
+    this.questionService.createGoogleForm(this.questions).subscribe((data) => {
+      this.formsUrl = data.result;
+      this.dialogFormVisible = true;
     });
   }
 }

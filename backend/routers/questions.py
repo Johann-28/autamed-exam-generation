@@ -15,7 +15,7 @@ async def get_questions(files: List[UploadFile] = File(...),
                         question_types : str = Form(...),
                         key_topics : str = Form(...)):
     llmClient = LLMClient()
-    return llmClient.generate_questions(files , question_types)   
+    return llmClient.generate_questions(files , question_types, key_topics)   
 
 @router.post("/create-google-form")
 async def create_google_form(questions : List[Question]):
@@ -24,4 +24,10 @@ async def create_google_form(questions : List[Question]):
     # Puedes usar run_sample() o un método personalizado
     result = manager.run_sample(questions)
     return {"message": "Form created", "result": result}
+
+@router.post("/get_docs_topics")
+async def get_questions(files: List[UploadFile] = File(...)):
+    llmClient = LLMClient()
+    return llmClient.get_docs_topics(files)   
+
 

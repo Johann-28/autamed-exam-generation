@@ -12,4 +12,23 @@
       </li>
     </ul>
   </p-card>
+    <p-button label="Export Exam" icon="pi pi-arrow-right" iconPos="right" (click)="exportExam()">
+    </p-button>
 </p-scrollpanel>
+
+<p-dialog [draggable]="false" [modal]="true" [(visible)]="dialogFormVisible"
+  >
+    <app-export-exam-dialog [formsUrl]="formsUrl"></app-export-exam-dialog>
+</p-dialog>
+
+<p-dialog 
+  [draggable]="false" 
+  [modal]="true" 
+  [(visible)]="dialogVisible" 
+  [style]="{ width: '20vw' }"
+  closeOnEscape="false" 
+  closable="false">
+  <div class="flex justify-center">
+    <p-progress-spinner ariaLabel="loading" />
+  </div>
+</p-dialog>
