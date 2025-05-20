@@ -1,5 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from services.llm_client import LLMClient
+from .forms import GoogleFormsQuizManager
+from models.question import Question
 from typing import List
 
 router = APIRouter(
@@ -14,6 +16,11 @@ async def get_questions(files: List[UploadFile] = File(...),
     llmClient = LLMClient()
     return llmClient.generate_questions(files , question_types)   
 
-@router.get("/create-google-form")
+@router.post("/create-google-form")
 async def create_google_form():
-    return {"message": "Google form created successfully."}
+    APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9vCvcMSvT8KuKiWPUZy0kkcatRc2ETfXunVpHVVsTULwc3LdBVB7z4iQt1Quyw4BF/exec"
+    manager = GoogleFormsQuizManager(APPS_SCRIPT_URL)
+    # Puedes usar run_sample() o un método personalizado
+    result = manager.run_sample()
+    return {"message": "Form created", "result": result}
+
