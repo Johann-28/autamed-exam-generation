@@ -13,13 +13,14 @@ import { DialogModule } from 'primeng/dialog';
 import { ExportExamDialogComponent } from '../export-exam-dialog/export-exam-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Checkbox, CheckboxModule } from 'primeng/checkbox';
 
 
 
 @Component({
   selector: 'app-question-list',
   standalone: true,
-  imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule, DialogModule, ExportExamDialogComponent, ButtonModule, ProgressSpinnerModule],
+  imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule, DialogModule, ExportExamDialogComponent, ButtonModule, ProgressSpinnerModule, CheckboxModule],
   providers: [QuestionService, FilesService],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',

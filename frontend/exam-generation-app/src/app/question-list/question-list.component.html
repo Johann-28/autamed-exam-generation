@@ -66,11 +66,18 @@ This configuration shows the questions in a single column
             <ul class="flex-1">
               <li *ngFor="let answer of question.answers" class="mb-2">
                 <p-radiobutton
+                  *ngIf="question.type == 1"
                   name="question-{{ question.question }}"
                   [value]="true" 
                   [(ngModel)]="answer.is_correct"
                   inputId="answer-{{ answer.text }}"
                 ></p-radiobutton>
+
+                <p-checkbox
+                  *ngIf="question.type == 2"
+                  [(ngModel)]="answer.is_correct"
+                  binary="true"
+                ></p-checkbox>
                 <label for="answer-{{ answer.text }}" class="ml-2">{{ answer.text }}</label>
               </li>
             </ul>
