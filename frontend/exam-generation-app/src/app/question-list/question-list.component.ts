@@ -66,6 +66,7 @@ export class QuestionListComponent implements OnInit{
     this.questionService.createGoogleForm(this.questions).subscribe((data) => {
       this.formsUrl = data.result;
       this.dialogFormVisible = true;
+      this.dialogVisible = false;
     });
   }
 }

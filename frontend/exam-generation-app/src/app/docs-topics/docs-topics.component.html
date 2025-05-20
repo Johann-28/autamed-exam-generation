@@ -1,33 +1,58 @@
-<div class="flex flex-row" style="width:  90vw; "> 
-  <div
-    class="card question-type-config flex items-center flex-wrap content-center justify-center flex-col transition-all duration-500 gap-3"
-    [ngClass]="{ 'basis-full': !sectionVisible, 'basis-[20%]': sectionVisible }"
-    style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
-  >
-    <p-button *ngFor="let item of keyTopics" 
+<div 
+  class="transition-all duration-500" 
+  [style]="sectionVisible ? 
+    'display: grid; grid-template-columns: minmax(280px, max(300px, 20%)) 1fr; width: 90vw;' : 
+    'display: flex; width: 90vw;'">
+  
+  <!-- Primer div: Sidebar -->
+  <div 
+    class="card question-type-config flex items-center flex-wrap content-center justify-center flex-col gap-3"
+    [ngClass]="{ 'flex-1': !sectionVisible }"
+    style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;">
+    
+    <p-button *ngFor="let item of keyTopics"
       (onClick)="toggleTopicSelection(item.title)"
-      [raised]="isTopicSelected(item.title)" [label]="item.title" 
+      [raised]="isTopicSelected(item.title)" 
+      [label]="item.title"
       [severity]="getValidatedBadgeSeverity()"
       [variant]="isTopicSelected(item.title) ? 'outlined' : 'text'"
       [disabled]="sectionVisible"
-      ></p-button>
-
-    <p-button label="Generate Exam" icon="pi pi-arrow-right" iconPos="right" (click)="generateQuestions()" [disabled]="sectionVisible">
+      >
     </p-button>
-
-    <p-dialog [draggable]="false" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '20vw' }"
-      closeOnEscape="false" closable="false">
+    
+    <p-button 
+      label="Generate Exam" 
+      icon="pi pi-arrow-right" 
+      iconPos="right" 
+      (click)="generateQuestions()" 
+      [disabled]="sectionVisible"
+      >
+    </p-button>
+    
+    <p-dialog 
+      [draggable]="false" 
+      [modal]="true" 
+      [(visible)]="dialogVisible" 
+      [style]="{ width: '20vw' }"
+      closeOnEscape="false" 
+      closable="false">
       <div class="flex justify-center">
         <p-progress-spinner ariaLabel="loading" />
       </div>
     </p-dialog>
   </div>
-
-  <div
+  
+  <!-- Segundo div: Contenido principal -->
+  <div 
     class="card question-type-config flex items-center flex-wrap content-center justify-center flex-col transition-all duration-500"
-    [ngClass]="{ 'hidden': !sectionVisible, 'basis-[80%]': sectionVisible }"
-    style="margin: 1rem; overflow-y: auto; height: 70vh; padding-top: 1rem;"
-  >
-    <app-question-list [files]="files" [filesSelected]="filesSelected" [selectedTopics]="selectedTopics" [questionTypes]="questionTypes" ></app-question-list>
+    [ngClass]="{ 'hidden': !sectionVisible }"
+    style="margin: 1rem; overflow-y: hidden; height: 70vh; padding-top: 1rem;">
+    
+    <app-question-list 
+      [files]="files" 
+      [filesSelected]="filesSelected" 
+      [selectedTopics]="selectedTopics" 
+      [questionTypes]="questionTypes">
+    </app-question-list>
   </div>
 </div>

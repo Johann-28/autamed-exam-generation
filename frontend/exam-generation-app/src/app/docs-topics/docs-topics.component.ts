@@ -8,6 +8,7 @@ import { QuestionListComponent } from '../question-list/question-list.component'
 import { SharedService } from '../shared/shared.service';
 import { QuestionService } from '../shared/question.service';
 import { QuestionTypeConfiguration } from '../models/question-type-configuration';
+import { ExportExamDialogComponent } from '../export-exam-dialog/export-exam-dialog.component';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { QuestionTypeConfiguration } from '../models/question-type-configuration
   imports: [ButtonModule, CommonModule, DialogModule, ProgressSpinnerModule, QuestionListComponent],
   templateUrl: './docs-topics.component.html',
   styleUrl: './docs-topics.component.scss',
-  providers: [SharedService, QuestionService]
+  providers: [SharedService, QuestionService],
 })
 export class DocsTopicsComponent implements OnInit{
 
@@ -25,6 +26,7 @@ export class DocsTopicsComponent implements OnInit{
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
 
   dialogVisible: boolean = false;
+  dialogFormVisible: boolean = false;
   sectionVisible: boolean = false;
   keyTopics: KeyTopics[] = [];
   selectedTopics: string[] = []; 
@@ -42,7 +44,7 @@ export class DocsTopicsComponent implements OnInit{
         this.dialogVisible = false;
         this.sectionVisible = true;
       }
-    });
+    });  
   }
 
   getDocsTopics(): void {
@@ -50,7 +52,7 @@ export class DocsTopicsComponent implements OnInit{
     this.files.forEach((file) => {
       formData.append('files', file);
     });
-    this.questionService.getDocsTopics(formData).subscribe((data) => {
+    this.questionService.getMockupKeyTopics().subscribe((data) => {
       this.keyTopics = data;
       this.dialogVisible = false;
     });
