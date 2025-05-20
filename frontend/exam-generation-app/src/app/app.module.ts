@@ -12,6 +12,7 @@ import { QuestionTypeConfigComponent } from './question-type-config/question-typ
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
+import { QuestionService } from './shared/question.service';
 import { DocsTopicsComponent } from './docs-topics/docs-topics.component';
 
 
@@ -43,7 +44,8 @@ import { DocsTopicsComponent } from './docs-topics/docs-topics.component';
             }
       },
       ripple: true,
-    })
+    }),
+    QuestionService
   ],
   bootstrap: [AppComponent]
 })
