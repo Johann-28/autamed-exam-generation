@@ -95,9 +95,8 @@ class GoogleFormsQuizManager:
             print(f"Error: {str(e)}")
             raise
 
-    def run_sample(self, questions : list[Question]):
+    def run_sample(self, questions : list[Question], title : str):
         """Sample usage of the class."""
-        title = "Pruebaaaaa"
         description = "This is a sample quiz with 3 questions and scoring."
 
         questions_for_apps_script = ParsingUtils.convert_questions_for_google_forms(questions)

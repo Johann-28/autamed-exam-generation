@@ -4,6 +4,7 @@ import { delay, Observable, of, Subject } from 'rxjs';
 import { Question } from '../models/question';
 import { Answer } from '../models/anwer';
 import { KeyTopics } from '../models/key-topics';
+import { Exam } from '../models/exam';
 
 
 @Injectable()
@@ -20,9 +21,12 @@ export class QuestionService {
       return this.http.post<KeyTopics[]>(`${this.dataUrl}/get_docs_topics`, formData);
     }
 
+    createGoogleForm(questions : Question[], titleform : string): Observable<any> {
+      var exam : Exam = {
+        titleform: titleform,
+        questions: questions
+      };
+      return this.http.post<any>(this.dataUrl + '/create-google-form', exam);
+    }
 
-createGoogleForm(): Observable<any> {
-  console.log('Creating Google Form with questions:');
-  return this.http.get<any>(this.dataUrl + '/create-google-form');
-}
 }
