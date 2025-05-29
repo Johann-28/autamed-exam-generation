@@ -40,9 +40,9 @@ export class QuestionTypeConfigComponent implements OnInit {
   };
 
   questionTypeOptions: QuestionType[] = [
-    { type: 'MULTIPLE_CHOICE', description: 'Multiple Choice (one correct)' },
+    { type: 'MULTIPLE_CHOICE', description: 'Multiple Choice' },
     { type: 'CHECKBOX',
-      description: 'Multiple Choice (one or more correct)',
+      description: 'Checkbox',
     },
     { type: 'trueFalse', description: 'True/False' },
   ];

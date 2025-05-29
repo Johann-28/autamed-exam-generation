@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   protected files: File[] = [];
   protected questionTypes: QuestionTypeConfiguration[] = [];
   protected filesSelected: boolean = false; 
+  protected webUrl: string = '';
 
   ngOnInit() {
       this.primeng.ripple.set(true);

@@ -1,5 +1,7 @@
 import PyPDF2
 import io
+import requests
+from bs4 import BeautifulSoup
 
 class DocumentExtractor:
     @staticmethod
@@ -31,4 +33,25 @@ class DocumentExtractor:
             return text
         except Exception as e:
             print(f"An error occurred while extracting text: {e}")
+            return ""
+        
+    @staticmethod
+    def extract_text_from_webpage(url: str) -> str:
+        """Extracts visible text from a given webpage URL."""
+        try:
+
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            # Remove script and style elements
+            for element in soup(["script", "style"]):
+                element.decompose()
+
+            text = soup.get_text(separator="\n")
+        
+            lines = [line.strip() for line in text.splitlines() if line.strip()]
+            return " ".join(lines)
+        except Exception as e:
+            print(f"An error occurred while extracting text from webpage: {e}")
             return ""

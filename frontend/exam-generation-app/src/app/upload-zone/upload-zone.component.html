@@ -1,17 +1,35 @@
-    <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" styleClass="md:w-20rem h-1 mb-6 w-full md:ml-auto">
-                <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
+<div class="flex flex-col gap-4">
+    <div>
+          <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" styleClass="md:w-20rem h-1 mb-6 w-full md:ml-auto">
+        <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
     </p-progressbar>
-    <p-toast />
-    <p-fileupload class="w-full overflow-y-auto" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" (onClear)="onClearTemplatingUpload($event)" (onSelect)="onSelectedFiles($event)" (onRemove)="onRemoveFile($event)" [multiple]="true" accept="image/* , .pdf , .ppt , .pptx " [maxFileSize]="maxFileSize" mode="advanced">
-        <ng-template #empty>
-                <div class="flex items-center justify-center flex-col">
-                <i class="leading-none pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color mb-6"></i>
-                <p class="mt-6 mb-0">Drag and drop files to here to upload.</p>
-            </div>
-        </ng-template>
-        <ng-template #content>
-            <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
-            </ul>
-        </ng-template>
-    </p-fileupload>
+    <p-toast />   
+    <p-fileupload class="w-full overflow-y-auto" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" 
+    (onUpload)="onUpload($event)" 
+    (onClear)="onClearTemplatingUpload($event)" 
+    (onSelect)="onSelectedFiles($event)" 
+    (onRemove)="onRemoveFile($event)" [multiple]="true" 
+    accept="image/* , .pdf , .ppt , .pptx " 
+    [maxFileSize]="maxFileSize" mode="advanced">
+    <ng-template #empty>
+        <div class="flex items-center justify-center flex-col">
+            <i class="leading-none pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color mb-6"></i>
+            <p class="mt-6 mb-0">Drag and drop files to here to upload.</p>
+        </div>
+    </ng-template>
+    <ng-template #content>
+        <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+        </ul>
+    </ng-template>
+</p-fileupload>
+</div>
+
+<div class="card flex flex-row flex-wrap items-center gap-2 justify-center w-full ">
+    <p-iconfield class="flex-1 min-w-0">
+            <p-inputicon styleClass="pi pi-link" />
+            <input type="url" [(ngModel)]="webUrl" pInputText
+                [placeholder]="webUrlPlaceHolder" style="width: 100%;" />
+        </p-iconfield>
+</div>
+</div>

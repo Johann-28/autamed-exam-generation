@@ -6,6 +6,7 @@ from models.question_type import QuestionType
 from models.key_topics import KeyTopics
 from utils.parsing_utils import ParsingUtils
 from typing import List
+from google.genai import types
 from fastapi import UploadFile
 import os
 
@@ -13,8 +14,8 @@ class LLMClient:
     def __init__(self):
         """Initialize the generator by loading environment variables and setting up the client."""
         load_dotenv()
-        self.genai_api_key = os.getenv("GENAI_API_KEY")
-        self.llm = os.getenv("LLM")
+        self.genai_api_key = "AIzaSyDXSjIm0Ylet1aDnPw-oUbqpTzniOeHSpQ"
+        self.llm = "gemini-2.0-flash"
         self.client = genai.Client(api_key=self.genai_api_key)
 
     def _generate_prompt(self, text: str, question_types: List[QuestionType], key_topics : List[str]) -> str:
@@ -56,6 +57,18 @@ class LLMClient:
     def _count_tokens(self, model: str, content: str):
         return self.client.models.count_tokens(model=model, contents=content)
 
+    def processImage(self, files: List[UploadFile]) -> list[str]:
+        images = []
+        for file in files:
+            image_bytes = file.file.read()
+            image = types.Part.from_bytes(
+                data=image_bytes,
+                mime_type=file.content_type,
+            )
+            images.append(image)
+    
+        return images
+
     def generate_questions(self, files: List[UploadFile] , question_types_list : str, key_topics_list) -> list[Question]:
 
         # Parse the question types from the input string
@@ -66,13 +79,14 @@ class LLMClient:
 
         text = TextUtils.combine_text_from_files(files)
 
+        images = self.processImage(files)
         # Generate the prompt
         prompt = self._generate_prompt(text , question_types, key_topics)
 
         # Generate content using the LLM
         response = self.client.models.generate_content(
             model=self.llm,
-            contents=prompt,
+            contents=[prompt, images],
             config={
                 "response_mime_type": "application/json",
                 "response_schema": list[Question]
@@ -96,10 +110,11 @@ class LLMClient:
             Text:
             {text}
         """
-        models = self.client.models.list()
+        images = self.processImage(files)
+
         response = self.client.models.generate_content(
             model=self.llm,
-            contents=prompt,
+            contents=[prompt, images],
             config={
                 "response_mime_type": "application/json",
                 "response_schema": list[KeyTopics]

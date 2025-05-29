@@ -32,6 +32,7 @@ export class QuestionListComponent implements OnInit{
   @Input() files: File[] = [];
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
   @Input() selectedTopics: string[] = []; 
+  @Input() webUrl: string = '';
   formsUrl : string = '';
   dialogVisible: boolean = false;
   dialogFormVisible: boolean = false;

@@ -6,7 +6,15 @@
   </p-floatlabel>
   
   <p-button class="mb-8" icon="pi pi-clipboard" [rounded]="true" [text]="true" severity="secondary" (onClick)="copyToClipboard(formsUrl)"/>
+
+
+    <p-button class="mb-8" icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary" (onClick)="downloadQuestionsPdf()"/>
+
+  
 </div>
 @if (visible()) {
   <p-message [life]="3000" severity="success">Link copied</p-message>
 }
+
+
+

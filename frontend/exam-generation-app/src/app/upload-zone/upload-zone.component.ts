@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { Component, EventEmitter, input, Output, Input } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
@@ -6,18 +8,25 @@ import {
   FileRemoveEvent,
   FileSelectEvent,
   FileUpload,
-  UploadEvent,
+  UploadEvent
 } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
+import { InputTextModule } from 'primeng/inputtext';
 import { FilesService } from '../shared/files.service';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 @Component({
   selector: 'app-upload-zone',
   standalone: true,
   templateUrl: './upload-zone.component.html',
   styleUrls: ['./upload-zone.component.scss'],
-  imports: [FileUpload, ToastModule, CommonModule, ProgressBarModule],
+  imports: [FileUpload, ToastModule, CommonModule, 
+            ProgressBarModule, IconFieldModule, 
+            InputIconModule, InputTextModule, 
+            FormsModule, ButtonModule , ScrollPanelModule],
   providers: [MessageService],
 })
 export class UploadZoneComponent {
@@ -26,10 +35,13 @@ export class UploadZoneComponent {
   maxFileSize: number = 15000000; // 15MB
   totalSize: number = 0;
   totalSizePercent: number = 0;
+  webUrl: string = ''; 
+  webUrlPlaceHolder: string = 'https://example.com/'; 
 
   // Output variables to emit the state of filesSelected and the list of files
   @Output() filesSelectedChange = new EventEmitter<boolean>();
   @Output() filesChange: EventEmitter<File[]> = new EventEmitter<File[]>();
+  @Output() urlSelectedChange = new EventEmitter<string>();
 
   constructor(
     private config: PrimeNG,
@@ -64,6 +76,7 @@ export class UploadZoneComponent {
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
     this.filesChange.emit(this.uploadedFiles);
     this.filesSelectedChange.emit(hasFiles);
+    this.urlSelectedChange.emit(this.webUrl);
   }
 
   onClearTemplatingUpload(clear: any) {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { KeyTopics } from '../models/key-topics';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,7 @@ export class DocsTopicsComponent implements OnInit{
   @Input() filesSelected: boolean = false;
   @Input() files: File[] = [];
   @Input() questionTypes: QuestionTypeConfiguration[] = [];
+  @Input() webUrl: string = '';
 
   dialogVisible: boolean = false;
   dialogFormVisible: boolean = false;
@@ -52,7 +53,9 @@ export class DocsTopicsComponent implements OnInit{
     this.files.forEach((file) => {
       formData.append('files', file);
     });
-    this.questionService.getMockupKeyTopics().subscribe((data) => {
+
+    formData.append('webUrl', this.webUrl);
+    this.questionService.getDocsTopics(formData).subscribe((data) => {
       this.keyTopics = data;
       this.dialogVisible = false;
     });
