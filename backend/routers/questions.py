@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, Body
 from services.llm_client import LLMClient
 from .forms import GoogleFormsQuizManager
-from backend.models.exam import Exam
+from models.exam import Exam
 from typing import List
 from services.document_extractor import DocumentExtractor
 

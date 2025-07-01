@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import UploadFile
-from backend.services.document_extractor import DocumentExtractor
+from services.document_extractor import DocumentExtractor
 
 class TextUtils:
     @staticmethod
