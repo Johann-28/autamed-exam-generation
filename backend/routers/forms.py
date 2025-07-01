@@ -82,11 +82,9 @@ class GoogleFormsQuizManager:
 
             result = self.configure_quiz(form_id, title, description, questions)
 
-            if result.get('success'):
-                print("Quiz configured successfully")
-                return result
-            else:
-                raise Exception(f"Apps Script error: {result.get('error')}")
+        
+            return result
+          
 
         except HttpError as error:
             print(f"API error: {error}")
