@@ -9,13 +9,18 @@ from typing import List
 from google.genai import types
 from fastapi import UploadFile
 import os
+from pathlib import Path
+
 
 class LLMClient:
     def __init__(self):
         """Initialize the generator by loading environment variables and setting up the client."""
-        load_dotenv()
-        self.genai_api_key = "AIzaSyDXSjIm0Ylet1aDnPw-oUbqpTzniOeHSpQ"
-        self.llm = "gemini-2.0-flash"
+        
+        env_path = Path(__file__).parent.parent / '.env'
+        load_dotenv(env_path)
+        
+        self.genai_api_key = os.getenv("GENAI_API_KEY")
+        self.llm = os.getenv("LLM")
         self.client = genai.Client(api_key=self.genai_api_key)
 
     def _generate_prompt(self, text: str, question_types: List[QuestionType], key_topics : List[str]) -> str:
