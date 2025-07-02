@@ -9,7 +9,7 @@ import { Exam } from '../models/exam';
 
 @Injectable()
 export class QuestionService {
-    private dataUrl = 'http://127.0.0.1:8000/questions';
+    private dataUrl = 'http://localhost:8000/questions';
 
     constructor(public http: HttpClient) {}
 
