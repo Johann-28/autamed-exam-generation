@@ -1,11 +1,11 @@
+# docker-compose.dev.yaml - Solo para desarrollo local
 services:
   backend:
     image: djohann28/automated-exam-generation.backend:1.0
     ports:
       - "8000:8000"
-    environment:
-      - GENAI_API_KEY=${GENAI_API_KEY}
-      - LLM=${LLM}
+    env_file:
+      - ./backend/.env
 
   frontend:
     image: djohann28/automated-exam-generation.frontend:1.0
