@@ -11,4 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
+      env:
+        GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}    
+        LLM: ${{ env.LLM }} 
       run: docker compose up
