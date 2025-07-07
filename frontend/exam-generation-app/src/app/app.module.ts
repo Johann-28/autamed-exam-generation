@@ -14,6 +14,7 @@ import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { QuestionService } from './shared/question.service';
 import { DocsTopicsComponent } from './docs-topics/docs-topics.component';
+import { ExamsListComponent } from './exams-list/exams-list.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { DocsTopicsComponent } from './docs-topics/docs-topics.component';
     QuestionListComponent,
     StepperModule,
     ButtonModule,
-    DocsTopicsComponent
+    DocsTopicsComponent,
+    ExamsListComponent
   ],
   providers: [
     provideHttpClient(),

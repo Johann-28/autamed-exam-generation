@@ -37,7 +37,9 @@ async def save_exam(exam: Exam, db: Session = Depends(get_db)):
         db_exam = ExamService.create_exam_from_questions(
             db=db,
             name=exam.titleform,
-            questions=exam.questions
+            questions=exam.questions,
+            google_forms_url=exam.formUrl
+            
         )
         return db_exam
     except Exception as e:

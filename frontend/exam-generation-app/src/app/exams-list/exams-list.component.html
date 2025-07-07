@@ -1,0 +1,252 @@
+<div class="w-full h-full p-6">
+  <!-- Header -->
+  <div class="text-center mb-6">
+    <h2 class="text-3xl font-bold text-surface-800 dark:text-surface-200 mb-2">
+      🎯 My Exams Dashboard
+    </h2>
+    <p class="text-surface-600 dark:text-surface-400">
+      Manage all your created exams in one place
+    </p>
+  </div>
+
+  <!-- Success message for new exam -->
+  <div *ngIf="newExam" class="mb-6">
+    <p-message 
+      severity="success" 
+      text="✅ Exam created successfully!" 
+      [closable]="true"
+      (onClose)="newExam = null">
+    </p-message>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-primary-50 dark:bg-primary-900 p-4 rounded-lg border border-primary-200 dark:border-primary-700">
+      <div class="flex items-center">
+        <i class="pi pi-file text-primary-500 text-2xl mr-3"></i>
+        <div>
+          <div class="text-xl font-semibold text-primary-700 dark:text-primary-300">
+            {{ totalExams }}
+          </div>
+          <div class="text-primary-600 dark:text-primary-400 text-sm">Total Exams</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-green-50 dark:bg-green-900 p-4 rounded-lg border border-green-200 dark:border-green-700">
+      <div class="flex items-center">
+        <i class="pi pi-check-circle text-green-500 text-2xl mr-3"></i>
+        <div>
+          <div class="text-xl font-semibold text-green-700 dark:text-green-300">
+            {{ activeExams }}
+          </div>
+          <div class="text-green-600 dark:text-green-400 text-sm">Active Exams</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg border border-blue-200 dark:border-blue-700">
+      <div class="flex items-center">
+        <i class="pi pi-question-circle text-blue-500 text-2xl mr-3"></i>
+        <div>
+          <div class="text-xl font-semibold text-blue-700 dark:text-blue-300">
+            {{ totalQuestions }}
+          </div>
+          <div class="text-blue-600 dark:text-blue-400 text-sm">Total Questions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-semibold text-surface-800 dark:text-surface-200">
+      Recent Exams
+    </h3>
+    <div class="flex gap-2">
+      <p-button 
+        icon="pi pi-refresh" 
+        [outlined]="true"
+        (onClick)="loadExams()"
+        pTooltip="Refresh list">
+      </p-button>
+      <p-button 
+        label="Create New Exam" 
+        icon="pi pi-plus"
+        (onClick)="onCreateNewExam()">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Exams Table -->
+  <div class="card">
+    <p-table 
+      [value]="exams" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} exams"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      styleClass="p-datatable-gridlines">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">
+            <i class="pi pi-file"></i>
+          </th>
+          <th pSortableColumn="name">
+            Exam Name
+            <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="created_at">
+            Created Date
+            <p-sortIcon field="created_at"></p-sortIcon>
+          </th>
+          <th>Questions</th>
+          <th>Status</th>
+          <th>Google Form</th>
+          <th style="width: 10rem">Actions</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-exam let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <i class="pi pi-file-edit text-primary-500"></i>
+          </td>
+          <td>
+            <span class="font-semibold">{{ exam.name }}</span>
+          </td>
+          <td>
+            {{ exam.created_at | date:'short' }}
+          </td>
+          <td>
+            <p-tag 
+              [value]="exam.questions?.length + ' questions'" 
+              severity="info">
+            </p-tag>
+          </td>
+          <td>
+            <p-tag 
+              [value]="exam.is_active ? 'Active' : 'Inactive'"
+              [severity]="exam.is_active ? 'success' : 'secondary'">
+            </p-tag>
+          </td>
+          <td>
+            <p-button 
+              *ngIf="exam.google_forms_url; else noForm"
+              icon="pi pi-external-link" 
+              [outlined]="true"
+              size="small"
+              (onClick)="openGoogleForm(exam.google_forms_url)"
+              pTooltip="Open Google Form">
+            </p-button>
+            <ng-template #noForm>
+              <span class="text-surface-400">No form</span>
+            </ng-template>
+          </td>
+          <td>
+            <div class="flex gap-1">
+              <p-button 
+                icon="pi pi-eye" 
+                size="small"
+                [outlined]="true"
+                (onClick)="viewExam(exam)"
+                pTooltip="View exam">
+              </p-button>
+              <p-button 
+                icon="pi pi-google" 
+                size="small"
+                severity="success"
+                [outlined]="true"
+                (onClick)="createGoogleForm(exam)"
+                pTooltip="Create Google Form">
+              </p-button>
+              <p-button 
+                icon="pi pi-trash" 
+                size="small"
+                severity="danger"
+                [outlined]="true"
+                (onClick)="deleteExam(exam)"
+                pTooltip="Delete exam">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center py-8">
+            <div class="flex flex-col items-center">
+              <i class="pi pi-file text-4xl text-surface-400 mb-4"></i>
+              <h4 class="text-lg font-semibold text-surface-600 mb-2">No exams found</h4>
+              <p class="text-surface-400 mb-4">Start by creating your first exam</p>
+              <p-button 
+                label="Create New Exam" 
+                icon="pi pi-plus"
+                (onClick)="onCreateNewExam()">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Exam Details Dialog -->
+<p-dialog 
+  [(visible)]="showExamDetails" 
+  header="📋 Exam Details"
+  [style]="{ width: '80vw', maxWidth: '800px' }"
+  [modal]="true">
+  
+  <div *ngIf="selectedExam" class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="font-semibold">Exam Name:</label>
+        <p>{{ selectedExam.name }}</p>
+      </div>
+      <div>
+        <label class="font-semibold">Created:</label>
+        <p>{{ selectedExam.created_at | date:'medium' }}</p>
+      </div>
+    </div>
+    
+    <div>
+      <label class="font-semibold">Questions ({{ selectedExam.questions?.length }}):</label>
+      <div class="mt-2 space-y-2">
+        <div 
+          *ngFor="let question of selectedExam.questions; let i = index" 
+          class="p-3 border border-surface-200 rounded">
+          <h5 class="font-medium mb-2">{{ i + 1 }}. {{ question.question_text }}</h5>
+          <div class="text-sm text-surface-600">
+            Type: {{ question.question_type }} | Score: {{ question.score }}
+          </div>
+          <div class="mt-2">
+            <div *ngFor="let answer of question.answers" class="flex items-center gap-2">
+              <i 
+                [class]="answer.is_correct ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"
+                class="text-sm">
+              </i>
+              <span [class]="answer.is_correct ? 'font-medium' : ''">
+                {{ answer.answer_text }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Close" 
+      icon="pi pi-times" 
+      [outlined]="true"
+      (onClick)="showExamDetails = false">
+    </p-button>
+  </ng-template>
+</p-dialog>

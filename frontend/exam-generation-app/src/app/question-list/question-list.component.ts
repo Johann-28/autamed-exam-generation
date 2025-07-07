@@ -16,6 +16,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
 import { Checkbox, CheckboxModule } from 'primeng/checkbox';
 import { FloatLabel } from 'primeng/floatlabel';
+import { ExamService } from '../shared/exam.service';
 
 
 
@@ -23,7 +24,7 @@ import { FloatLabel } from 'primeng/floatlabel';
   selector: 'app-question-list',
   standalone: true,
   imports: [CommonModule, ScrollPanelModule, CardModule, RadioButtonModule, FormsModule, DialogModule, ExportExamDialogComponent, ButtonModule, ProgressSpinnerModule, CheckboxModule, InputTextModule, FloatLabel],
-  providers: [QuestionService, FilesService],
+  providers: [QuestionService, FilesService, ExamService],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
 })
@@ -39,7 +40,9 @@ export class QuestionListComponent implements OnInit{
   questions: Question[] = [];
   formTitle: string = '';
 
-  constructor(private questionService: QuestionService, private filesService : FilesService, private sharedService: SharedService) {}
+  constructor(private questionService: QuestionService, private filesService : FilesService, private sharedService: SharedService,
+              private examService: ExamService
+  ) {}
 
   ngOnInit(): void {
     this.sharedService.generateQuestions$.subscribe(() => {
@@ -72,6 +75,16 @@ export class QuestionListComponent implements OnInit{
       this.formsUrl = data.result;
       this.dialogFormVisible = true;
       this.dialogVisible = false;
+
+      const exam = {
+        questions: this.questions,
+        formUrl: this.formsUrl,
+        titleform: this.formTitle
+      };
+
+      this.examService.saveExam(exam).subscribe((response) => {
+        console.log('Exam saved successfully:', response);
+    });
     });
   }
 }
