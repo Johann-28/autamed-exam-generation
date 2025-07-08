@@ -1,4 +1,22 @@
 services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-test
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: exam_generation_db
+    ports:
+      - "5433:5432"  # Puerto diferente para evitar conflictos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql  # ✅ Corregir la ruta
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d exam_generation_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     image: djohann28/automated-exam-generation.backend:1.0
     ports:
@@ -6,6 +24,12 @@ services:
     environment:
       - GENAI_API_KEY=${GENAI_API_KEY}
       - LLM=${LLM}
+      - DATABASE_URL=postgresql://testuser:${DB_PASSWORD}@postgres:5432/exam_generation_db  # ❌ Corregir: test_user → testuser
+    env_file:
+      - .env  # ✅ Agregar esta línea
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   frontend:
     image: djohann28/automated-exam-generation.frontend:1.0
@@ -13,3 +37,6 @@ services:
       - "4200:4200"
     depends_on:
       - backend
+
+volumes:  # ❌ Corregir indentación
+  postgres_data:
